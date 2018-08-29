@@ -53,7 +53,8 @@ for dir in `ls`; do
     	git fetch origin
 
 		#获取 master 分支当前的SHA1
-		SHA_master=git rev-parse origin/master^{}
+		SHA_master=`git log -1 --format="%H" origin/master`
+		echo "●●●●●●●●●●●●●●●●●●●●  SHA_master:${SHA_master}    "
 
 		#获取当前分支名
         git checkout ${work_branch}
@@ -65,13 +66,13 @@ for dir in `ls`; do
 			#清除当前库中未提交的变更
 			git reset --hard
 			#清除本地库中构建过程生成的中间产物
-			git clean -dqxf
+#git clean -dqxf
 			echo "●●●●●●●●●●●●●●●●●●●●  pull from bnb    "
 			#拉取代码
 			git pull
 
 			#检查主干上的提交是否都已合并到QA分支
-			exist=$(git log TUJIA-9969_orderdetail |grep f1ae5a4707ef0e2cf25c95382ad62706eb9468f8)
+			exist=`git log origin/${work_branch} ^${SHA_master} --oneline`
 			echo "●●●●●●●●●●●●●●●●●●●●  SHA_master\n${exist}    "
 
 			#如果未合并master，先merge
